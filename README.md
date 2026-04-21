@@ -38,6 +38,18 @@ Si deseas desplegar la aplicación o usar una base de datos externa, configura l
 
 ## Despliegue en Render.com
 
-URL en Render.com: _[Por definir]_
+Para desplegar esta aplicación como **Web Service** en Render.com, sigue estos pasos:
 
-(El despliegue está configurado para Web Services en Render usando variables de entorno).
+1. Crea un nuevo "Web Service" y conéctalo a tu repositorio de GitHub.
+2. Selecciona **Docker** como el entorno de ejecución (Runtime). Render usará automáticamente el `Dockerfile` en la raíz.
+3. En la sección **Environment Variables**, configura las siguientes variables mínimas obligatorias:
+   - `ASPNETCORE_ENVIRONMENT`: `Production`
+   - `ASPNETCORE_URLS`: `http://0.0.0.0:${PORT}`
+   - `ConnectionStrings__DefaultConnection`: La cadena de conexión a SQLite (`Data Source=app.db`) o a tu base de datos en producción (ej. PostgreSQL si cambias de provider).
+   - `Redis__ConnectionString`: *(Opcional)* URL de conexión a un servidor Redis gestionado para habilitar la caché distribuida y manejo de sesión (ej. `redis-xxxxx.c11.us-east-1-2.ec2.cloud.redislabs.com:12345,password=xxxxxx`).
+
+### Verificación Online
+Una vez desplegado en Render, deberías poder realizar y verificar las siguientes funciones:
+- **Login**: Iniciar sesión con el usuario Coordinador (`admin@universidad.edu` / `Password123!`).
+- **Catálogo e Inscripción**: Visualizar cursos activos y matricularte (requiere crear una cuenta de estudiante e iniciar sesión).
+- **Panel Coordinador**: Accesible solo si tu cuenta posee el rol de coordinador (`/Coordinador`). Permite CRUD de cursos y gestión de estados en las matrículas.

@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /source
+
+# Copy csproj and restore as distinct layers
+COPY *.csproj .
+RUN dotnet restore
+
+# Copy everything else and build app
+COPY . .
+RUN dotnet publish -c Release -o /app
+
+# Final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+COPY --from=build /app .
+
+# El puerto se inyecta via la variable ASPNETCORE_URLS
+ENTRYPOINT ["dotnet", "PortalUniversidad.dll"]
