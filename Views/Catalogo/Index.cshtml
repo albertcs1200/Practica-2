@@ -1,0 +1,62 @@
+@model IEnumerable<PortalUniversidad.Models.Curso>
+
+@{
+    ViewData["Title"] = "Catálogo de Cursos";
+}
+
+<h1 class="mb-4">Catálogo de Cursos</h1>
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="buscarNombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="buscarNombre" name="buscarNombre" value="@ViewData["BuscarNombre"]" placeholder="Ej: Matemáticas">
+            </div>
+            <div class="col-md-2">
+                <label for="minCreditos" class="form-label">Créditos Mínimos</label>
+                <input type="number" class="form-control" id="minCreditos" name="minCreditos" value="@ViewData["MinCreditos"]" min="1">
+            </div>
+            <div class="col-md-2">
+                <label for="maxCreditos" class="form-label">Créditos Máximos</label>
+                <input type="number" class="form-control" id="maxCreditos" name="maxCreditos" value="@ViewData["MaxCreditos"]" min="1">
+            </div>
+            <div class="col-md-3">
+                <label for="horarioFiltro" class="form-label">Horario</label>
+                <input type="time" class="form-control" id="horarioFiltro" name="horarioFiltro" value="@ViewData["HorarioFiltro"]">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var curso in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">@curso.Nombre</h5>
+                    <h6 class="card-subtitle mb-3 text-muted">Código: @curso.Codigo</h6>
+                    <p class="card-text">
+                        <i class="bi bi-star-fill text-warning"></i> <strong>Créditos:</strong> @curso.Creditos <br />
+                        <i class="bi bi-clock-fill text-info"></i> <strong>Horario:</strong> @curso.HorarioInicio.ToString(@"hh\:mm") - @curso.HorarioFin.ToString(@"hh\:mm") <br />
+                        <i class="bi bi-people-fill text-success"></i> <strong>Cupo:</strong> @curso.CupoMaximo
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 pt-0">
+                    <a asp-action="Detalle" asp-route-id="@curso.Id" class="btn btn-outline-primary w-100">Ver Detalle</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-4">
+        No se encontraron cursos activos con los filtros aplicados.
+    </div>
+}
