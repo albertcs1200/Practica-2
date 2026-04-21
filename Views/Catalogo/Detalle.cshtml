@@ -9,10 +9,18 @@
         <div class="col-md-8 offset-md-2">
             <h2>@Model.Nombre <span class="badge bg-secondary fs-5 align-middle">@Model.Codigo</span></h2>
             
-            @if (TempData["Mensaje"] != null)
+            @if (TempData["Exito"] != null)
             {
-                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                    @TempData["Mensaje"]
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    @TempData["Exito"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    @TempData["Error"]
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
