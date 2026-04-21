@@ -1,0 +1,69 @@
+@model IEnumerable<PortalUniversidad.Models.Matricula>
+
+@{
+    ViewData["Title"] = "Matrículas del Curso";
+}
+
+<h1 class="mb-4">Matrículas del Curso: @ViewBag.CursoNombre</h1>
+
+<p>
+    <a asp-action="Index" class="btn btn-secondary">Volver al Panel</a>
+</p>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Usuario (Email)</th>
+            <th>Fecha de Registro</th>
+            <th>Estado Actual</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Usuario.UserName</td>
+            <td>@item.FechaRegistro.ToString("g")</td>
+            <td>
+                @if (item.Estado == PortalUniversidad.Models.EstadoMatricula.Pendiente)
+                {
+                    <span class="badge bg-warning text-dark">Pendiente</span>
+                }
+                else if (item.Estado == PortalUniversidad.Models.EstadoMatricula.Confirmada)
+                {
+                    <span class="badge bg-success">Confirmada</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Cancelada</span>
+                }
+            </td>
+            <td>
+                <form asp-action="CambiarEstadoMatricula" method="post" class="d-flex gap-2 mb-0">
+                    <input type="hidden" name="matriculaId" value="@item.Id" />
+                    <input type="hidden" name="cursoId" value="@ViewBag.CursoId" />
+                    
+                    @if (item.Estado == PortalUniversidad.Models.EstadoMatricula.Pendiente)
+                    {
+                        <button type="submit" name="nuevoEstado" value="Confirmada" class="btn btn-sm btn-success">Confirmar</button>
+                        <button type="submit" name="nuevoEstado" value="Cancelada" class="btn btn-sm btn-danger">Cancelar</button>
+                    }
+                    else if (item.Estado == PortalUniversidad.Models.EstadoMatricula.Confirmada)
+                    {
+                        <button type="submit" name="nuevoEstado" value="Cancelada" class="btn btn-sm btn-danger">Cancelar</button>
+                    }
+                    else if (item.Estado == PortalUniversidad.Models.EstadoMatricula.Cancelada)
+                    {
+                        <button type="submit" name="nuevoEstado" value="Confirmada" class="btn btn-sm btn-success">Confirmar (Restaurar)</button>
+                    }
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No hay matrículas registradas para este curso.</div>
+}
