@@ -1,0 +1,55 @@
+@model PortalUniversidad.Models.Curso
+
+@{
+    ViewData["Title"] = "Detalle del Curso";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>@Model.Nombre <span class="badge bg-secondary fs-5 align-middle">@Model.Codigo</span></h2>
+            
+            @if (TempData["Mensaje"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                    @TempData["Mensaje"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="card mt-4 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary border-bottom pb-2">Información del Curso</h5>
+                    <dl class="row mt-4">
+                        <dt class="col-sm-4 text-muted">Créditos</dt>
+                        <dd class="col-sm-8 fs-5 fw-bold">@Model.Creditos</dd>
+
+                        <dt class="col-sm-4 text-muted">Cupo Máximo</dt>
+                        <dd class="col-sm-8">@Model.CupoMaximo estudiantes</dd>
+
+                        <dt class="col-sm-4 text-muted">Horario</dt>
+                        <dd class="col-sm-8">@Model.HorarioInicio.ToString(@"hh\:mm") a @Model.HorarioFin.ToString(@"hh\:mm")</dd>
+                        
+                        <dt class="col-sm-4 text-muted">Estado</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Activo)
+                            {
+                                <span class="badge bg-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactivo</span>
+                            }
+                        </dd>
+                    </dl>
+
+                    <form asp-action="Inscribirse" method="post" class="mt-5 text-center">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success btn-lg px-5 shadow">Inscribirse</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-3 px-4">Volver al Catálogo</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
